@@ -11,3 +11,9 @@ def inverse_captcha(input):
         if int(n) == int(nums[j]):
             result += int(n)
     return result
+
+
+if __name__ == '__main__':
+    with open('input.txt', 'r') as f:
+        captcha = f.read().strip()
+    print('Result: {}'.format(inverse_captcha(captcha)))
