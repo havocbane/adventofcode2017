@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+import time
+
 
 def inverse_captcha(input):
     result = 0
@@ -30,5 +32,10 @@ def inverse_captcha_halfway(input):
 if __name__ == '__main__':
     with open('input.txt', 'r') as f:
         captcha = f.read().strip()
-    print('Result: {}'.format(inverse_captcha(captcha)))
-    print('Halfway Result: {}'.format(inverse_captcha_halfway(captcha)))
+
+    for fn in (inverse_captcha, inverse_captcha_halfway,):
+        start = time.time()
+        result = fn(captcha)
+        end = time.time()
+        diff = end - start
+        print('{fn} result: {r}, time {t}'.format(fn=fn, r=result, t=diff))
