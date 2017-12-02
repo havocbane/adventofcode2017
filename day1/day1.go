@@ -22,7 +22,7 @@ func inverseCaptcha(str string) int64 {
 	last, err := strconv.ParseInt(string(str[size-1]), 10, 64)
 	check(err)
 
-	for i < size-2 {
+	for i < size {
 		cur, err := strconv.ParseInt(string(str[i]), 10, 64)
 		check(err)
 
