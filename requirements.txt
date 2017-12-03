@@ -1,0 +1,6 @@
+ipython
+matplotlib
+pygal
+pyplot
+pytest
+pytest-benchmark
