@@ -17,13 +17,13 @@ $ pip install -r requirements.txt
 
 # Tests
 
-I like [TDD](https://en.wikipedia.org/wiki/Test-driven_development). Some, if not all, days have tests.
+I like [TDD](https://en.wikipedia.org/wiki/Test-driven_development). Some, if not all, days have tests. Well, at least some [pytest](https://github.com/pytest-dev/pytest) ones and maybe some go tests if you're lucky.
 
 ```sh
-$ cd day#
-$ py.test
-# or also generate a histogram!
+$ py.test # run all tests from the root directory or some from individual day folders.
+# and also generate a histogram!
 $ py.test --benchmark-histogram=file_prefix
+$ go test # You probably need to be in a day folder for this to work.
 ```
 
 # Run Solutions
