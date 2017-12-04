@@ -1,3 +1,6 @@
+import time
+
+
 def spiral_memory(search):
     spiral = {
         '0,0': 1
@@ -54,5 +57,10 @@ def find_adj(spiral, i, j):
             pass
     return sum
 
+
 if __name__ == '__main__':
-    print(spiral_memory(325489))
+    start = time.time()
+    result = spiral_memory(325489)
+    end = time.time()
+    elapsed = end - start
+    print("Result {0}, time {1}".format(result, elapsed))
