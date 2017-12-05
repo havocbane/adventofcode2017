@@ -33,8 +33,9 @@ def exit_maze_with_check(instructions):
 if __name__ == '__main__':
     with open('input.txt', 'r') as f:
         data = f.read()
-    start = time.time()
-    num = exit_maze(data.strip())
-    end = time.time()
-    elapsed = end - start
-    print('Result: {0}, time: {1}'.format(num, elapsed))
+    for fn in (exit_maze, exit_maze_with_check,):
+        start = time.time()
+        num = fn(data.strip())
+        end = time.time()
+        elapsed = end - start
+        print('Result: {0}, time: {1}'.format(num, elapsed))
