@@ -27,15 +27,16 @@ def debugger(memory_banks):
         # Update and store (at the top of the loop) the new configuration.
         configuration = ','.join([str(bank) for bank in memory])
     # Seen should contain only unique configurations.
-    return len(seen)
+    length = len(seen)
+    return length, length - seen.index(configuration)
 
 
 if __name__ == '__main__':
     with open('input.txt', 'r') as f:
         data = f.read()
-    for fn in (debugger,):
-        start = time.time()
-        num = fn(data.strip())
-        end = time.time()
-        elapsed = end - start
-        print('Result: {0}, time: {1}'.format(num, elapsed))
+    start = time.time()
+    cycles, loops = debugger(data.strip())
+    end = time.time()
+    elapsed = end - start
+    print('Result: {cycles}, {loops}, time: {elapsed}'.format(
+        cycles=cycles, loops=loops, elapsed=elapsed))
