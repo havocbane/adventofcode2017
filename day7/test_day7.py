@@ -5,7 +5,7 @@ import pytest
 from day7 import find_root
 
 
-def test_build_tree(benchmark):
+def test_find_root(benchmark):
     test_case = r"""pbga (66)
 xhth (57)
 ebii (61)
