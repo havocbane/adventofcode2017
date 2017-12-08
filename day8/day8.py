@@ -1,7 +1,19 @@
 #!/usr/bin/env python
 
+import ast
+import operator
 import time
 from collections import defaultdict
+
+
+ops = {
+    '==': operator.eq,
+    '!=': operator.ne,
+    '>': operator.gt,
+    '>=': operator.ge,
+    '<': operator.lt,
+    '<=': operator.le,
+}
 
 
 def compute_largest_register(data):
@@ -9,11 +21,10 @@ def compute_largest_register(data):
     registers = defaultdict(int)
     largest_seen = 0
     for row in instructions:
-        values = row.split()
-        register, instruction, value = values[0], values[1], int(values[2])
-        conditional = 'registers["' + values[4] + '"] ' + ' '.join(values[5:])  # ignore 'if'
-        modify = eval(conditional)
-        if modify:
+        values = row.split()  # e.g. ['b', 'inc', '5', 'if', 'a', '>', '1']
+        register, instruction, value = values[0], values[1], int(ast.literal_eval(values[2]))
+        lhs, op, rhs = values[4], values[5], int(ast.literal_eval(values[6]))
+        if ops[op](registers[lhs], rhs):
             if instruction == 'inc':
                 registers[register] += value
             elif instruction == 'dec':
