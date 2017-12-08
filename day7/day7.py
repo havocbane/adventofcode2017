@@ -6,7 +6,7 @@ import time
 class Program(object):
     def __init__(self, name, weight, links):
         self.name = name
-        self.weight = weight
+        self.weight = int(weight)
         self.links = links
 
     def __repr__(self):
@@ -42,14 +42,81 @@ def find_root(data):
     # The root node will be 1, all children will be > 1 except leaves which stay at 0
     for name, depth in depths.items():
         if depth == 1:
-            return name
+            return name, parsed_nodes
+
+
+class Tree(object):
+    children = []
+
+    def __init__(self, root, children):
+        self.root = root
+        self.children = children
+
+    def get_children(self):
+        return self.children
+
+    def __repr__(self):
+        return "{name} -> [{children}]".format(name=self.root, children=','.join([child.root for child in self.children]))
+
+
+def find_unbalanced(data):
+    root, parsed_nodes = find_root(data)
+
+    def create_child_trees(children):
+        child_trees = []
+        for child in children:
+            sub_children = [parsed_nodes[link] for link in child.links]
+            child_trees.append(Tree(child.name, create_child_trees(sub_children)))
+        return child_trees
+
+    children = [parsed_nodes[link] for link in parsed_nodes[root].links]
+    tree = Tree(root, create_child_trees(children))
+    sums = {}
+
+    def find_sums(root, children):
+        total = 0
+        for child in children:
+            if not child.get_children():
+                total += parsed_nodes[child.root].weight
+            else:
+                total += find_sums(child.root, child.get_children())
+        sums[root] = parsed_nodes[root].weight + total
+        return total
+
+    find_sums(tree.root, tree.get_children())
+
+    def find_mismatched(root):
+        child_sums = []
+        for child in root.get_children():
+            child_sums.append(sums[child.root])
+        if not len(set(child_sums)) == 1:
+            top = max(child_sums)
+            bottom = min(child_sums)
+            if child_sums.count(top) < child_sums.count(bottom):
+                i = child_sums.index(top)
+            else:
+                i = child_sums.index(bottom)
+            mismatched_child = root.get_children()[i]
+            return parsed_nodes[mismatched_child.root].weight - (top - bottom)
+        else:
+            for child in root.get_children():
+                return find_mismatched(child)
+
+    return find_mismatched(tree)
 
 
 if __name__ == '__main__':
     with open('input.txt', 'r') as f:
         data = f.read()
     start = time.time()
-    root = find_root(data.strip())
+    root = find_root(data.strip())[0]
     end = time.time()
     elapsed = end - start
     print('Result: {root}, time: {elapsed}'.format(root=root, elapsed=elapsed))
+
+    start = time.time()
+    import pdb; pdb.set_trace()
+    mismatched = find_unbalanced(data.strip())
+    end = time.time()
+    elapsed = end - start
+    print('Result: {mismatched}, time: {elapsed}'.format(mismatched=mismatched, elapsed=elapsed))
