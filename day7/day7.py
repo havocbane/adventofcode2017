@@ -76,9 +76,8 @@ def find_unbalanced(data):
     def find_sums(root, children):
         total = 0
         for child in children:
-            if not child.get_children():
-                total += parsed_nodes[child.root].weight
-            else:
+            total += parsed_nodes[child.root].weight
+            if child.get_children():
                 total += find_sums(child.root, child.get_children())
         sums[root] = parsed_nodes[root].weight + total
         return total
@@ -88,20 +87,22 @@ def find_unbalanced(data):
     def find_mismatched(root):
         child_sums = []
         for child in root.get_children():
-            child_sums.append(sums[child.root])
-        if not len(set(child_sums)) == 1:
-            top = max(child_sums)
-            bottom = min(child_sums)
-            if child_sums.count(top) < child_sums.count(bottom):
-                i = child_sums.index(top)
-            else:
-                i = child_sums.index(bottom)
-            mismatched_child = root.get_children()[i]
-            return parsed_nodes[mismatched_child.root].weight - (top - bottom)
-        else:
-            for child in root.get_children():
-                return find_mismatched(child)
+            if child.root in sums:
+                child_sums.append(sums[child.root])
 
+        if len(set(child_sums)) <= 1:
+            # We have found the bad node!
+            return root
+
+        over_weight = max(child_sums)
+        i = child_sums.index(over_weight)
+
+        mismatched_child = root.get_children()[i]
+        mismatched = find_mismatched(mismatched_child)
+        diff = over_weight - min(child_sums)
+        if isinstance(mismatched, int):
+            return mismatched
+        return parsed_nodes[mismatched.root].weight - diff
     return find_mismatched(tree)
 
 
@@ -115,7 +116,6 @@ if __name__ == '__main__':
     print('Result: {root}, time: {elapsed}'.format(root=root, elapsed=elapsed))
 
     start = time.time()
-    import pdb; pdb.set_trace()
     mismatched = find_unbalanced(data.strip())
     end = time.time()
     elapsed = end - start
