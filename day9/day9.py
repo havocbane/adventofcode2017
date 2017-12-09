@@ -8,6 +8,7 @@ def stream_score(data):
     current_group = 0
     inside_garbage = False
     skip_next = False
+    garbage_count = 0
     for stream in data.strip().split('\n'):
         for char in stream.strip():
             if skip_next:
@@ -17,6 +18,8 @@ def stream_score(data):
             elif inside_garbage:
                 if char == '>':
                     inside_garbage = False
+                else:
+                    garbage_count += 1
             elif char == '{':
                 current_group += 1
             elif char == '}':
@@ -24,14 +27,15 @@ def stream_score(data):
                 current_group -= 1
             elif char == '<':
                 inside_garbage = True
-    return score
+    return score, garbage_count
 
 
 if __name__ == '__main__':
     with open('input.txt', 'r') as f:
         data = f.read()
     start = time.time()
-    score = stream_score(data)
+    score, garbage_count = stream_score(data)
     end = time.time()
     elapsed = end - start
-    print('Result: {score}, time: {elapsed}'.format(score=score, elapsed=elapsed))
+    print('Result: {score}, garbage count: {garbage_count}, time: {elapsed}'.format(
+        score=score, garbage_count=garbage_count, elapsed=elapsed))
