@@ -25,14 +25,16 @@ fn = {
 def shortest_path(walk):
     p1 = Point(0, 0, 0)
     p2 = Point(0, 0, 0)
+    furthest = 0
     for direction in walk:
         p2.x, p2.y = fn[direction](p2.x, p2.y)
         p2.z = find_z(p2.x, p2.y)
-    return distance(p2, p1)
+        furthest = max(distance(p2, p1), furthest)
+    return distance(p2, p1), furthest
 
 
 if __name__ == '__main__':
     with open('input.txt', 'r') as f:
         data = f.read()
-    result = shortest_path(data.strip().split(','))
-    print(result)
+    shortest_path, furthest = shortest_path(data.strip().split(','))
+    print(shortest_path, furthest)

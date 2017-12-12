@@ -12,5 +12,5 @@ from day11 import shortest_path
     ('se,sw,se,sw,sw', 3,),
 ])
 def test_shortest_path(benchmark, test_case, expected):
-    actual = benchmark(shortest_path, test_case.split(','))
+    actual = benchmark(shortest_path, test_case.split(','))[0]
     assert expected == actual
