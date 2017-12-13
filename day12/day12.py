@@ -8,6 +8,9 @@ class Node(object):
         self.value = value
         self.adjacency_list = adjacency_list
 
+    def __lt__(self, rhs):
+        return True if self.x < rhs.x else False
+
 
 def build_graph(data):
     graph = []
@@ -18,30 +21,42 @@ def build_graph(data):
         graph.append(node)
         if node.value == '0':
             root = node
+    assert root is not None
     return graph, root
 
 
+def dfs(graph, root, group):
+    group.append(root.value)
+    for node_value in root.adjacency_list:
+        if node_value not in group:
+            node = next(filter(lambda n: n.value == node_value, graph))
+            dfs(graph, node, group)
+
+
 def find_zero_group_size(data):
-    def dfs(graph, root):
-        zero_group.append(root.value)
-        for node_value in root.adjacency_list:
-            if node_value not in zero_group:
-                node = next(filter(lambda n: n.value == node_value, graph))
-                dfs(graph, node)
-
     graph, root = build_graph(data.strip())
-    assert root is not None
+    group = []
+    dfs(graph, root, group)
+    return len(group)
 
-    zero_group = []
-    dfs(graph, root)
-    return len(zero_group)
+def find_number_of_groups(data):
+    graph, _ = build_graph(data.strip())
+    groups = []
+    for node in graph:
+        group = []
+        dfs(graph, node, group)
+        group.sort()
+        if group not in groups:
+            groups.append(group)
+    return len(groups)
 
 
 if __name__ == '__main__':
     with open('input.txt', 'r') as f:
         data = f.read()
-    start = time.time()
-    result = find_zero_group_size(data)
-    end = time.time()
-    elapsed = end - start
-    print('Result: {result}, time: {time}'.format(result=result, time=elapsed))
+    for fn in (find_zero_group_size, find_number_of_groups,):
+        start = time.time()
+        result = fn(data)
+        end = time.time()
+        elapsed = end - start
+        print('Result: {result}, time: {time}'.format(result=result, time=elapsed))
