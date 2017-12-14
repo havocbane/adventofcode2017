@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 
+import sys
 import time
 from collections import defaultdict, namedtuple
+from copy import copy
 
 Level = namedtuple('Level', 'scanner direction span')
 Level.__new__.__defaults__ = (None, 'down', 0)
@@ -46,10 +48,38 @@ def packet_riding(data):
     return caught
 
 
+def run_simulation(state):
+    max_level = max(state.keys())
+    cur_level = 0
+    while cur_level <= max_level:
+        if state[cur_level].scanner == 0:
+            return False
+        cur_level += 1
+        move_scanners(state)
+    return True
+
+
+def find_when_not_captured(data):
+    state = initialize(data.strip())
+    wait = 0
+    while True:
+        # Skip the first state because we would always get immediately captured.
+        wait += 1
+        move_scanners(state)
+        if run_simulation(copy(state)):
+            break
+        # Brute forcing takes a long time, so show some progress.
+        if wait % 100000 == 0:
+            sys.stdout.write('.')
+            sys.stdout.flush()
+    print()
+    return wait
+
+
 if __name__ == '__main__':
     with open('input.txt', 'r') as f:
         data = f.read()
-    for fn in (packet_riding,):
+    for fn in (packet_riding, find_when_not_captured):
         start = time.time()
         result = fn(data)
         end = time.time()
