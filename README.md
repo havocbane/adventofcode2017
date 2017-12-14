@@ -4,16 +4,29 @@ Here are my solutions! They're not just good, they're good enough!
 
 # Setup
 
-I use [pyenv](https://github.com/pyenv/pyenv) and [pyenv-virtualenv](https://github.com/pyenv/pyenv-virtualenv). So should you!
-
 ```sh
 $ git clone https://github.com/havocbane/adventofcode2017
 $ cd adventofcode2017
+```
+
+I use [pyenv](https://github.com/pyenv/pyenv) and [pyenv-virtualenv](https://github.com/pyenv/pyenv-virtualenv). So should you!
+
+Most of this was written using cpython 3.6:
+```sh
+$ pyenv install 3.6.3
 $ pyenv virtualenv 3.6.3 adventofcode
 $ pyenv local adventofcode
-$ pip install -U pip setuptools wheel
 $ pip install -r requirements.txt
 ```
+
+PyPy is really helpful for speeding up this code. Since PyPy 3 is currently in beta status, use the 2.7 version:
+```sh
+$ pyenv install pypy2.7-5.9.0
+$ pyenv virtualenv pypy2.7-5.9.0 pypy2
+$ pyenv shell pypy2-aoc
+$ pip install -r requirements.txt
+```
+This makes a *huge* difference running the full problem set for Day 13.
 
 # Tests
 

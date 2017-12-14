@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import six
 import time
 
 
@@ -29,7 +30,8 @@ def dfs(graph, root, group):
     group.append(root.value)
     for node_value in root.adjacency_list:
         if node_value not in group:
-            node = next(filter(lambda n: n.value == node_value, graph))
+            node = filter(lambda n: n.value == node_value, graph)
+            node = next(node) if six.PY3 else node[0]
             dfs(graph, node, group)
 
 
@@ -38,6 +40,7 @@ def find_zero_group_size(data):
     group = []
     dfs(graph, root, group)
     return len(group)
+
 
 def find_number_of_groups(data):
     graph, _ = build_graph(data.strip())

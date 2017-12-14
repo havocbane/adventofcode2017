@@ -1,5 +1,5 @@
 ipython
-matplotlib
 pygal
 pytest
 pytest-benchmark
+six
