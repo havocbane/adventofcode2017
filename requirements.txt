@@ -1,4 +1,5 @@
 ipython
+networkx
 pygal
 pytest
 pytest-benchmark

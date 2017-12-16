@@ -2,11 +2,18 @@
 
 import pytest
 
-from day14 import count_used_squares
+from day14 import count_squares, count_regions
 
 
-def test_knot_hash(benchmark):
+def test_squares(benchmark):
     test_case = 'flqrgnkx'
     expected = 8108
-    actual = benchmark(count_used_squares, test_case)
+    actual = benchmark(count_squares, test_case)
+    assert expected == actual
+
+
+def test_regions(benchmark):
+    test_case = 'flqrgnkx'
+    expected = 1242
+    actual = benchmark(count_regions, test_case)
     assert expected == actual
